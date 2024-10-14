@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Main {
 
     public static void sair(){
-
+        System.out.println("a");
     }
     public static void iniciarJogo(){
 
