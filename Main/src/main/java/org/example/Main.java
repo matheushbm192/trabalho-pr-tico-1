@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main{
 
 public static void sair(){
-    System.out.println("\nJogo encerrado!");
+    System.out.println("\nJogo encerrado!!");
     System.exit(0);
 }
 public static void iniciarJogo(){
