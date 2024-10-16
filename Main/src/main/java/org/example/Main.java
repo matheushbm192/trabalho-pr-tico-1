@@ -33,7 +33,7 @@ public class Main {
                 instrucoes();
             break;
             default:
-                System.out.println("O valor inserido é invalido! \nTente novamente!");
+                System.out.println("O valo inserido é invalido! \nTente novamente!");
                 String[] ola = {"ola", "fusca"};
                 main(ola);
         }
