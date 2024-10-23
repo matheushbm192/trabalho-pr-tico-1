@@ -75,7 +75,6 @@ public class Main {
         int linhaVazia = 2;
         int colunaVazia = 2;
 
-        Random random = new Random();
 
         int[] posicaoZero = {2,2};
 
