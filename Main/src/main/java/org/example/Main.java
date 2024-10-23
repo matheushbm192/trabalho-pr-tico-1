@@ -12,7 +12,7 @@ public class Main {
 
     public static  int nivelDificuldade() {
         Scanner entrada = new Scanner(System.in);
-        System.out.println("Insira o nivel de dificuldade desejado \n Fácil - 1 \n Médio - 2 \n Difícil - 3 ");
+        System.out.println("\nInsira o nivel de dificuldade desejado \n Fácil - 1 \n Médio - 2 \n Difícil - 3 ");
 
         while (true) {
             int numDeMovimentos;
@@ -32,57 +32,64 @@ public class Main {
     }
 
 
-    public static int[] sorteio(int[] posicaoZero) {
+    public static int[][] movimentosValidos(int[] posicaoZero) {
         Random roleta = new Random();
 
         if (posicaoZero[0] == 0 && posicaoZero[1] == 0){
             int[][] posicoes = {{0,1},{1,0}};
-            return posicoes[roleta.nextInt(0,posicoes.length)];
+            return posicoes;
         }else if (posicaoZero[0] == 0 && posicaoZero[1] == 1){
             int[][] posicoes = {{0,0},{0,2},{1,1}};
-            return posicoes[roleta.nextInt(0,posicoes.length)];
+            return posicoes;
         }else if (posicaoZero[0] == 0 && posicaoZero[1] == 2){
             int[][] posicoes = {{0,1},{1,2}};
-            return posicoes[roleta.nextInt(0,posicoes.length)];
+            return posicoes;
         }else if (posicaoZero[0] == 1 && posicaoZero[1] == 0){
             int[][] posicoes = {{0,0},{1,1},{2,0}};
-            return posicoes[roleta.nextInt(0,posicoes.length)];
+            return posicoes;
         }else if (posicaoZero[0] == 1 && posicaoZero[1] == 1){
             int[][] posicoes = {{0,1},{1,0},{1,2},{2,1}};
-            return posicoes[roleta.nextInt(0,posicoes.length)];
+            return posicoes;
         }else if (posicaoZero[0] == 1 && posicaoZero[1] == 2){
             int[][] posicoes = {{0,2},{1,1},{2,2}};
-            return posicoes[roleta.nextInt(0,posicoes.length)];
+            return posicoes;
         }else if (posicaoZero[0] == 2 && posicaoZero[1] == 0){
             int[][] posicoes = {{1,0},{2,1}};
-            return posicoes[roleta.nextInt(0,posicoes.length)];
+            return posicoes;
         }else if (posicaoZero[0] == 2 && posicaoZero[1] == 1){
             int[][] posicoes = {{2,0},{1,1},{2,2}};
-            return posicoes[roleta.nextInt(0,posicoes.length)];
+            return posicoes;
         }else{
             int[][] posicoes = {{1,2},{2,1}};
-            return posicoes[roleta.nextInt(0,posicoes.length)];
+            return posicoes;
+        }
+    }
+    public static void exibirMatriz(int[][] matriz){
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                System.out.print(matriz[i][j]);
+                System.out.print(" ");
+            }
+            System.out.println();
         }
     }
 
-    public static void embaralharJogo(int numDeMovimentos){
-        int[][] matriz = {
-                {1,2,3},
-                {4,5,6},
-                {7,8,0},
-        };
-
-        int linhaVazia = 2;
-        int colunaVazia = 2;
+    public static int[][] embaralharJogo(int numDeMovimentos,int[][] matriz){
+        Random sorteio = new Random();
 
 
         int[] posicaoZero = {2,2};
 
         for (int i = 0; i < numDeMovimentos ; i++) {
             int[]posicaoAnteriorZero = posicaoZero;
-            int[] posicaoMovimento = sorteio(posicaoZero);
 
-            // Acessar a posiçao no array que foi gerada na posicaoTemp e guradar o numero que esta lá
+            int[][] posicoes = movimentosValidos(posicaoZero);
+
+            int posicaoSorteada = sorteio.nextInt(0,posicoes.length);
+
+            int[] posicaoMovimento = posicoes[posicaoSorteada] ;
+
+
             int valorFuturaPosicaoZero = matriz[posicaoMovimento[0]][posicaoMovimento[1]];
 
             matriz[posicaoMovimento[0]][posicaoMovimento[1]] = 0;
@@ -93,32 +100,24 @@ public class Main {
 
         }
 
-
-
-//        System.out.println("funcao fazer movimento é chamada ");
-//        if (posicaoAtual[0] >= 3 || posicaoAtual[1] >= 3){
-//            System.out.println("Chama a funçao para refazer o movimento");
-//        } else{
-//            System.out.println("Exibe a matriz com o movimento feito");
-//        }
-
-
-        for(int i = 0; i < numDeMovimentos; i++){
-            //ideia: fazer com que o random sorteie ums das posições deste vetor, depois analisamos se essa posição é possível de realizar
-            //ver se a posição não passará da linha da matriz;
-            //matriz de movimentos válidos
-            int[][] movimentosValidos = {
-                    {linhaVazia -1, colunaVazia}, //cima
-                    {linhaVazia, colunaVazia-1}, //esquerda
-                    {linhaVazia, colunaVazia+1}, //direita
-                    {linhaVazia +1, colunaVazia}, //baixo
-            };
-
-
-        }
+        return matriz;
     }
+
     public static void iniciarJogo(){
-        embaralharJogo(nivelDificuldade());
+        int[][] matrizInicial = {
+                {1,2,3},
+                {4,5,6},
+                {7,8,0},
+        };
+        System.out.println("Aqui está a matriz inicial\n");
+        exibirMatriz(matrizInicial);
+
+        int [][] matriz = embaralharJogo(nivelDificuldade(), matrizInicial);
+
+        System.out.println("\nMatriz embaralhada!\n");
+        exibirMatriz(matriz);
+        System.out.println("\nComece a jogar! Escolha o seu primeiro movimento: \n");
+
     }
 
     public static void instrucoes() {
