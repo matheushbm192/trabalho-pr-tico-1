@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
+    static int[] posicaoZero = {2, 2};
 
     public static void sair() {
         System.out.println("\nJogo encerrado!!");
@@ -33,7 +34,6 @@ public class Main {
 
 
     public static int[][] movimentosValidos(int[] posicaoZero) {
-        Random roleta = new Random();
 
         if (posicaoZero[0] == 0 && posicaoZero[1] == 0){
             int[][] posicoes = {{0,1},{1,0}};
@@ -65,45 +65,102 @@ public class Main {
         }
     }
     public static void exibirMatriz(int[][] matriz){
+
         for (int i = 0; i < 3; i++) {
+            System.out.println(" --- --- ---");
+            System.out.print("|");
+
             for (int j = 0; j < 3; j++) {
-                System.out.print(matriz[i][j]);
-                System.out.print(" ");
+                if(matriz[i][j] != 0){
+                    System.out.print(" " + matriz[i][j] + " ");
+                } else {
+                    System.out.print("   ");
+                }
+                System.out.print("|");
+
             }
             System.out.println();
+
         }
+        System.out.println(" --- --- ---");
+    }
+
+    public static int[][] movimento(int[] jogada,int[][] matriz){
+
+        int[]posicaoAnteriorZero = posicaoZero;
+
+        int valorFuturaPosicaoZero = matriz[jogada[0]][jogada[1]];
+
+        matriz[jogada[0]][jogada[1]] = 0;
+
+        matriz[posicaoAnteriorZero[0]][posicaoAnteriorZero[1]] = valorFuturaPosicaoZero;
+
+        posicaoZero[0] = jogada[0];
+        posicaoZero[1] = jogada[1];
+
+        return matriz;
     }
 
     public static int[][] embaralharJogo(int numDeMovimentos,int[][] matriz){
         Random sorteio = new Random();
 
-
-        int[] posicaoZero = {2,2};
-
         for (int i = 0; i < numDeMovimentos ; i++) {
-            int[]posicaoAnteriorZero = posicaoZero;
 
             int[][] posicoes = movimentosValidos(posicaoZero);
-
+            //numero de 0 a 3
             int posicaoSorteada = sorteio.nextInt(0,posicoes.length);
+            //[2,1]
+            int[] jogada = posicoes[posicaoSorteada];
+            //funcao movimento(jogada, matriz)
+            movimento(jogada, matriz);
 
-            int[] posicaoMovimento = posicoes[posicaoSorteada] ;
-
-
-            int valorFuturaPosicaoZero = matriz[posicaoMovimento[0]][posicaoMovimento[1]];
-
-            matriz[posicaoMovimento[0]][posicaoMovimento[1]] = 0;
-
-            matriz[posicaoAnteriorZero[0]][posicaoAnteriorZero[1]] = valorFuturaPosicaoZero;
-            posicaoZero[0] = posicaoMovimento[0];
-            posicaoZero[1] = posicaoMovimento[1];
 
         }
 
         return matriz;
     }
 
+    public static boolean acertou(int[][] matrizInicial, int[][] matriz){
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if(matrizInicial[i][j]  != matriz[i][j]){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+    public static boolean validarJogada(int jogada,int[][] matriz){
+
+        int[][] possibilidades = movimentosValidos(posicaoZero);
+        //[[2,2],[1,2],...]
+        for (int i = 0; i < possibilidades.length ; i++) {
+            int[] possibilidade = possibilidades[i];
+
+            if(jogada == matriz[possibilidade[0]][possibilidade[1]]){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public static int[] posicaoJogada(int jogada,int[][] matriz){
+        int[][] posicoes = movimentosValidos(posicaoZero);
+        for (int i = 0; i < posicoes.length; i++) {
+            int[] posicao = posicoes[i];
+            if (matriz[posicao[0]][posicao[1]] == jogada) {
+                return posicao;
+            }
+        }
+        return posicoes[1];
+    }
     public static void iniciarJogo(){
+        Scanner entrada = new Scanner(System.in);
+
         int[][] matrizInicial = {
                 {1,2,3},
                 {4,5,6},
@@ -115,9 +172,31 @@ public class Main {
         int [][] matriz = embaralharJogo(nivelDificuldade(), matrizInicial);
 
         System.out.println("\nMatriz embaralhada!\n");
+
         exibirMatriz(matriz);
+
         System.out.println("\nComece a jogar! Escolha o seu primeiro movimento: \n");
 
+        while(true){
+            int jogada = entrada.nextInt();
+
+            if(validarJogada(jogada, matriz)){
+
+            //funcao de trocar o lugar do zero para o numero que o usuario pediu
+                movimento(posicaoJogada(jogada, matriz), matriz);
+            }else {
+                System.out.println("Moviemnto invalido. Tente novamente!");
+            }
+            exibirMatriz(matriz);
+
+            if(acertou(matrizInicial, matriz)){
+                System.out.println("Parabens!!!!!!!!!! Você venceu!");
+                break;
+            }
+
+            System.out.println("Qual é a proxima jogada?");
+        }
+        System.out.println("Jogo encerrado");
     }
 
     public static void instrucoes() {
