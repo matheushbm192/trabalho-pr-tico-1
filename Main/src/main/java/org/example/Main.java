@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -8,9 +9,54 @@ public class Main {
         System.out.println("\nJogo encerrado!!");
         System.exit(0);
     }
+    public static  int nivelDificuldade() {
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Insira o nivel de dificuldade desejado \n Fácil - 1 \n Médio - 2 \n Difícil - 3 ");
 
-    public static void iniciarJogo() {
-
+        while (true) {
+            int numDeMovimentos;
+            int dificuldade = entrada.nextInt();
+            
+            if (dificuldade == 1){
+                return numDeMovimentos = 20;
+            }else if(dificuldade == 2){
+                return numDeMovimentos = 40; 
+            }else if(dificuldade == 3){
+                return numDeMovimentos = 80; 
+            }else {
+                System.out.println("O valor inserido não está entre as opções! \n  " +
+                        "Insira o nivel de dificuldade desejado \n Fácil - 1 \n Médio - 2 \n Difícil - 3");
+            }
+        }
+    }
+    public static void embaralharJogo(int numDeMovimentos){
+        int[][] matriz = {
+            {1,2,3},
+            {4,5,6},
+            {7,8,0},
+        };
+        
+        int linhaVazia = 2; 
+        int colunaVazia = 2; 
+        
+        Random random = new Random();
+        
+        for(int i = 0; i < numDeMovimentos; i++){
+            //ideia: fazer com que o random sorteie ums das posições deste vetor, depois analisamos se essa posição é possível de realizar 
+            //ver se a posição não passará da linha da matriz; 
+            //matriz de movimentos válidos
+            int[][] movimentosValidos = {
+                {linhaVazia -1, colunaVazia}, //cima
+                {linhaVazia, colunaVazia-1}, //esquerda
+                {linhaVazia, colunaVazia+1}, //direita
+                {linhaVazia +1, colunaVazia}, //baixo
+            };
+            
+            
+        }
+    }
+    public static void iniciarJogo(){
+        embaralharJogo(nivelDificuldade());
     }
 
     public static void instrucoes() {
