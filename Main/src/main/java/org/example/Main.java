@@ -21,16 +21,14 @@ public class Main {
         System.out.println("\nInsira o nivel de dificuldade desejado: \n Fácil - 1 \n Médio - 2 \n Difícil - 3\n");
 
         while (true) {
-            
-            int numDeMovimentos;
             int dificuldade = entrada.nextInt();
 
             if (dificuldade == 1){
-                return numDeMovimentos = 20;
+                return 20;
             }else if(dificuldade == 2){
-                return numDeMovimentos = 40;
+                return 40;
             }else if(dificuldade == 3){
-                return numDeMovimentos = 80;
+                return 80;
             }else {
                 System.out.println("\nO valor inserido não está entre as opções!\n" +
                         "Insira o nivel de dificuldade desejado: \n Fácil - 1 \n Médio - 2 \n Difícil - 3\n");
@@ -95,7 +93,7 @@ public class Main {
     }
 
     //função que atribui a nova posição de zero dentro da matriz de acordo com a jogada do usuário
-    public static int[][] movimento(int[] jogada,int[][] matriz){
+    public static void movimento(int[] jogada,int[][] matriz){
         
         //guarda a posição anterior do zero
         int[]posicaoAnteriorZero = posicaoZero;
@@ -113,8 +111,6 @@ public class Main {
         posicaoZero[0] = jogada[0];
         posicaoZero[1] = jogada[1];
         
-        //retorna matriz atualizada
-        return matriz;
     }
 
     //função para embaralhar os números de acordo com o nível de dificuldade escolhido pelo usuário
@@ -135,7 +131,7 @@ public class Main {
 
         }
         //retorna a matriz embaralhada 
-        return matriz;
+        return matriz; 
     }
     
     //função que retorna se o usuário ganhou ou não
