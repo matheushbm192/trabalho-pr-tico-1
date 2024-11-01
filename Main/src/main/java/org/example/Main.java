@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -110,24 +111,29 @@ public class Main {
         //atualizando o valor da nova posição
         posicaoZero[0] = jogada[0];
         posicaoZero[1] = jogada[1];
-        
+
+
     }
 
     //função para embaralhar os números de acordo com o nível de dificuldade escolhido pelo usuário
     public static int[][] embaralharJogo(int numMovimentos,int[][] matriz){
-        //método de sorteio 
+
+        //método de sorteio
         Random sorteio = new Random();
 
         for (int i = 0; i < numMovimentos ; i++) {
+
             //guarda quais são as posições validas retornadas pela função "movimentosValidos"
             int[][] posicoes = movimentosValidos(posicaoZero);
+
             //sorteia uma posição de acordo com a quantidade de possibilidades 
             int posicaoSorteada = sorteio.nextInt(0,posicoes.length);
+
             //guarda a posição sorteada 
             int[] jogada = posicoes[posicaoSorteada];
+
             //chama a função "movimento" para realizar as trocas de posição na matriz 
             movimento(jogada, matriz);
-
 
         }
         //retorna a matriz embaralhada 
@@ -135,18 +141,32 @@ public class Main {
     }
     
     //função que retorna se o usuário ganhou ou não
-    public static boolean acertou(int[][] matrizInicial, int[][] matriz){
+    public static boolean acertou(int[][] matrizPadrao, int[][] matriz){
+        //Variaveis matrizPadrao
+        String matrizPadraoElementos;
+        String matrizPadraoString = "";
+
+        //Variaveis matrizFinal
+        String matrizFinalElementos;
+        String matrizFinalString = "";
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                //compara cada posição das matrizes
-                if(matrizInicial[i][j]  != matriz[i][j]){
-                    //matrizes diferentes. Usuário ainda não consegiu completar o jogo
-                    return true;
-                }
+
+                //Conversão matriz padrao para texto
+                matrizPadraoElementos =  Integer.toString(matrizPadrao[i][j]);
+                matrizPadraoString +=  matrizPadraoElementos;
+
+                //Conversão matriz final para texto
+                matrizFinalElementos =  Integer.toString(matriz[i][j]);
+                matrizFinalString +=  matrizFinalElementos;
+
             }
         }
-        //matrizes iguais. Usuário completou o jogo
-        return false;
+
+        //Retorna True para se as matrizes forem iguais e False para se as matrizes forem diferentes
+        return matrizPadraoString.equals(matrizFinalString);
+
     }
 
 
@@ -185,27 +205,32 @@ public class Main {
     public static void iniciarJogo(){
         Scanner entrada = new Scanner(System.in);
         int contaJogadas = 0;
-        
+        int[][] matrizPadrao = {
+                {1,2,3},
+                {4,5,6},
+                {7,8,0},
+        };
+
         //matriz inicial com valor fixo
-        int[][] matrizInicial = {
+        int[][] matriz = {
                 {1,2,3},
                 {4,5,6},
                 {7,8,0},
         };
         //chamando a função que exibe a matriz. 
-        exibirMatriz(matrizInicial);
+        exibirMatriz(matriz);
         System.out.println("Tabuleiro ordenado!\n");
-        
-        
+
+
         //armazenando dentro da variável "matriz" a matriz inicial que foi embaralhada. 
-        int[][] matriz = embaralharJogo(nivelDificuldade(), matrizInicial);
+        matriz = embaralharJogo(nivelDificuldade(), matriz);
         
         System.out.println("\nTabuleiro embaralhado! Vamos começar o jogo!\n");
         //chamando a função que exibe a matriz
         exibirMatriz(matriz);
         
-        System.out.println("\nQuantidades de jogadas até agora: " + contaJogadas + "\n");
-        System.out.println("Digite o número da peça que quer mover: \n");
+
+        System.out.println("Digite o número da peça que deseja mover: \n");
 
         //enquanto o usuário não ganha o jogo, o laço de repetição é executado
         while(true){
@@ -216,11 +241,14 @@ public class Main {
             //se retornar "true", o "if" é executado
             if(validarJogada(jogada, matriz)){
 
-            //função que realiza a mudança de posições 
+                //função que realiza a mudança de posições
                 movimento(posicaoJogada(jogada, matriz), matriz);
 
-            contaJogadas++; 
-                
+                if(acertou(matrizPadrao, matriz)){
+                    System.out.println("\nParabéns! Você completou o jogo com " + contaJogadas + " movimentos\n");
+                    break;
+                }
+                contaJogadas++;
             //se a função "validarJogo" retornar "false", ele irá executar o else
             }else {
                 System.out.println("Movimento inválido. Tente novamente!");
@@ -228,13 +256,10 @@ public class Main {
             //chama a função que exibe a matriz
             exibirMatriz(matriz);
             
-            //analisa se o usuário ganhou o jogo a cada movimento que ele realiza 
-            if(acertou(matrizInicial, matriz)){
-                System.out.println("\nParabéns! Você completou o jogo com " + contaJogadas + " movimentos\n");
-                break;
-            }
+            //analisa se o usuário ganhou o jogo a cada movimento que ele realiza
 
-            System.out.println("\nDigite o número da peça que quer mover: ");
+            System.out.println("\nQuantidades de jogadas até agora: " + contaJogadas + "\n");
+            System.out.println("\nDigite o número da peça que deseja mover: ");
         }
         //se o usuário ganhar o jogo é encerrado 
         System.out.println("Jogo encerrado");
