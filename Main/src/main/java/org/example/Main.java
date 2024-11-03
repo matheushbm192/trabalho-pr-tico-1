@@ -205,13 +205,14 @@ public class Main {
     public static void iniciarJogo(){
         Scanner entrada = new Scanner(System.in);
         int contaJogadas = 0;
+        //matriz inicial que mantém valor fixo
         int[][] matrizPadrao = {
                 {1,2,3},
                 {4,5,6},
                 {7,8,0},
         };
 
-        //matriz inicial com valor fixo
+        //matriz que sofre modificações 
         int[][] matriz = {
                 {1,2,3},
                 {4,5,6},
