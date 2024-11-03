@@ -202,6 +202,7 @@ public class Main {
         //nunca entra
         return null;
     }
+
     public static void iniciarJogo(){
         Scanner entrada = new Scanner(System.in);
         int contaJogadas = 0;
@@ -296,6 +297,10 @@ public class Main {
             case 2:
                 sair();
                 break;
+
+            default:
+            System.out.println("Esse valor é inválido! Tente novamente. ");
+            menu();
         }
         entrada.close();
     }
@@ -325,7 +330,8 @@ public class Main {
                 break;
 
             default:
-                main(null);
+            System.out.println("Esse valor é inválido! Tente novamente. ");
+            menu();
         }
         entrada.close();
 
