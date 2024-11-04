@@ -219,7 +219,7 @@ public class Main {
                 {4,5,6},
                 {7,8,0},
         };
-        //chamando a função que exibe a matriz. 
+        //chamando a função que exibe a matriz
         exibirMatriz(matriz);
         System.out.println("Tabuleiro ordenado!\n");
 
