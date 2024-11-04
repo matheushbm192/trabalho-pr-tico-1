@@ -202,18 +202,16 @@ public class Main {
         //nunca entra
         return null;
     }
-
     public static void iniciarJogo(){
         Scanner entrada = new Scanner(System.in);
         int contaJogadas = 0;
-        //matriz inicial que mantém valor fixo
         int[][] matrizPadrao = {
                 {1,2,3},
                 {4,5,6},
                 {7,8,0},
         };
 
-        //matriz que sofre modificações 
+        //matriz inicial com valor fixo
         int[][] matriz = {
                 {1,2,3},
                 {4,5,6},
@@ -299,8 +297,8 @@ public class Main {
                 break;
 
             default:
-            System.out.println("Esse valor é inválido! Tente novamente. ");
-            menu();
+                System.out.println("Esse valor é inválido! Tente novamente. ");
+                instrucoes();
         }
         entrada.close();
     }
@@ -330,8 +328,8 @@ public class Main {
                 break;
 
             default:
-            System.out.println("Esse valor é inválido! Tente novamente. ");
-            menu();
+                System.out.println("Esse valor é inválido! Tente novamente. ");
+                menu();
         }
         entrada.close();
 
