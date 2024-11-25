@@ -3,9 +3,27 @@ import java.util.Scanner;
 
 public class Main {
     static Scanner entrada = new Scanner(System.in);
+    static  LocalDate dataPartida = LocalDate.of(2024,11,1);
+    static GerenciadorPartidas partida = new GerenciadorPartidas();
+    public static void gerenciadorPartida(){
 
-    public static void comprarPassagem(){
+        partida.criarDiasVoos(dataPartida);
+        partida.criarAvioes();
 
+        for (int i = 0; i < dataPartida.lengthOfMonth(); i++) {
+            /*
+            loop de cadastro e compra:
+                //cadastra usuario
+                //compra passagem obs.: em loop caso usuario queira mais de uma passagem
+                    //cadastrar outro usuario?
+           */
+
+            //realiza o voo
+            dataPartida.plusDays(1);
+        }
+    }
+
+    public static  Passageiro  cadastro(){
         System.out.println("Vamos realizar o seu cadastro!");
         System.out.println();
         System.out.println("Insira o seu nome: ");
@@ -41,16 +59,48 @@ public class Main {
             }
 
         }
-        Passageiro novoPassageiro = new Passageiro(nome,email,endereco,data,comorbidade);
+        return new Passageiro(nome,email,endereco,data,comorbidade);
+    }
 
-        System.out.println("Deseja comprar passagem para qual dia ?(AAAA-MM-DD) ");
-        String stringDataViagem = entrada.nextLine();
-        LocalDate dataViagem = LocalDate.parse(stringDataViagem);
+    public static boolean dataViagemValida(LocalDate data){
+
+        if(data.isBefore(dataPartida) || data.isEqual(dataPartida)){
+            return false;
+        }
+        return true;
+    }
+    public static void comprarPassagem(Passageiro passageiro){
+
+        //todo criar funçao de validação do formato data
+        while (true){
+            System.out.println("Deseja comprar passagem para qual dia ?(AAAA-MM-DD) ");
+            String stringDataViagem = entrada.nextLine();
+            LocalDate dataViagem = LocalDate.parse(stringDataViagem);
+            if(!partida.vagasAviao(dataViagem)){
+                System.out.println("O avião está atingiu sua capacidade maxima, escolha outra data!");
+            }else if(dataViagemValida(dataViagem)){
+                break;
+            }else {
+                System.out.println("Data invalida! A data deve ser maior que a atual!!! ");
+            }
+        }
+        //escolher lugar
+
+        //acrescentar lista de viagem pendentes
+
+
+
+        System.out.println("Qual");
+        //passar lista de acentos disponiveis para o usuario de acordo com o dia especifico
+
+        //adicionar passagem ao usuario
+
                 //se ele ja possui passagem nessa data, se data é maior que atual, se a data esta nesse mes, se tem espaço no voo para esse dia
 
     }
     public static void main(String[] args) {
-            comprarPassagem();
+        Passageiro passageiro = cadastro();
+        comprarPassagem(passageiro);
 //        LocalDate data = LocalDate.of(1950,11,18);
 //        Passageiro leandro = new Passageiro("leo","ksnaksdn","sad",data,false);
 //        boolean bool =  leandro.idoso();

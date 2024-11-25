@@ -11,6 +11,7 @@ public class Passageiro {
     private LocalDate listaViagemPendentes[] = new LocalDate[31];
     private int contListaViagensPendente;
 
+
     public Passageiro(String nome, String email, String endereco, LocalDate dataNascimento, boolean comorbidade) {
         this.nome = nome;
         this.email = email;
