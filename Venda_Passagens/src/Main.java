@@ -12,7 +12,10 @@ public class Main {
 
         for (int i = 0; i < dataPartida.lengthOfMonth(); i++) {
             /*
+
+            //contabilizar cada voo 
             loop de cadastro e compra:
+
                 //cadastra usuario
                 //compra passagem obs.: em loop caso usuario queira mais de uma passagem
                     //cadastrar outro usuario?
@@ -26,22 +29,22 @@ public class Main {
     public static  Passageiro  cadastro(){
         System.out.println("Vamos realizar o seu cadastro!");
         System.out.println();
-        System.out.println("Insira o seu nome: ");
+        System.out.println("Insira o seu nome:");
         String nome = entrada.nextLine();
-        System.out.println("Insira o seu e-mail: ");
+        System.out.println("Insira o seu e-mail:");
         String email = entrada.nextLine();
-        System.out.println("Insira o seu endereço: ");
+        System.out.println("Insira o seu endereço:");
         String endereco = entrada.nextLine();
 
         //todo fazer verificação para o formato de data inserido
-        System.out.println("Insira a sua data de nascimento:(AAAA-MM-DD) ");
+        System.out.println("Insira a sua data de nascimento:(AAAA-MM-DD)");
         String stringData = entrada.nextLine();
         LocalDate data = LocalDate.parse(stringData);
 
         boolean comorbidade = false;
         int cont = 0;
         while (cont == 0){
-            System.out.println("Você possui alguma comorbidade?(Sim ou Não) ");
+            System.out.println("Você possui alguma comorbidade?(Sim ou Não)");
             String stringComorbidade = entrada.nextLine();
             switch (stringComorbidade){
                 case "Sim":
@@ -53,14 +56,17 @@ public class Main {
                     cont = 1;
                     break;
                 default:
-                    System.out.println("A opçao escolhida não é valida!");
-                    System.out.println("Tente novamente!");
+                    System.out.println("A opção escolhida não é válida. Tente novamente.");
                     cont = 0;
             }
 
         }
         return new Passageiro(nome,email,endereco,data,comorbidade);
     }
+
+    /*public static char[][] exibeAcentos(){
+
+    }*/
 
     public static boolean dataViagemValida(LocalDate data){
 
@@ -69,6 +75,7 @@ public class Main {
         }
         return true;
     }
+
     public static void comprarPassagem(Passageiro passageiro){
 
         //todo criar funçao de validação do formato data
@@ -77,11 +84,11 @@ public class Main {
             String stringDataViagem = entrada.nextLine();
             LocalDate dataViagem = LocalDate.parse(stringDataViagem);
             if(!partida.vagasAviao(dataViagem)){
-                System.out.println("O avião está atingiu sua capacidade maxima, escolha outra data!");
+                System.out.println("O avião atingiu sua capacidade máxima. Escolha outra data.");
             }else if(dataViagemValida(dataViagem)){
                 break;
             }else {
-                System.out.println("Data invalida! A data deve ser maior que a atual!!! ");
+                System.out.println("Data inválida! A data deve ser maior que a atual.");
             }
         }
         //escolher lugar

@@ -21,7 +21,7 @@ public class Aviao {
             topoLista++;
         }
     }
-
+    
     public void popularLugares(){
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 3; j++) {
