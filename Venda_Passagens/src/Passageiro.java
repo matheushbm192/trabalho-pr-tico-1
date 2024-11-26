@@ -21,7 +21,7 @@ public class Passageiro {
     }
 
     public String getNome() {
-        return nome;
+        return this.nome;
     }
 
     public int getPrioridade() {

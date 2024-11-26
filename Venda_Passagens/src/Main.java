@@ -53,7 +53,7 @@ public class Main {
             System.out.println("Todas as viagens do mês foram completadas");
             System.exit(0);
         }
-        System.out.println(dataPartida);
+        
         menu();
     }
 
