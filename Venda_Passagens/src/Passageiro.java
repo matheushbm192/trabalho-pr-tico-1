@@ -28,15 +28,15 @@ public class Passageiro {
         return prioridade;
     }
 
-    public void setPrioridade(int prioridade) {
-        this.prioridade = prioridade;
-    }
     public void acrescentarPrioridade(int prioridade) {
         this.prioridade += prioridade;
     }
 
     public boolean dataLivre(LocalDate data){
         for (int i = 0; i < listaViagemPendentes.length; i++) {
+            if(listaViagemPendentes[i] == null){
+                return false;
+            }
             if (listaViagemPendentes[i].equals(data)) {
                 return false;
             }

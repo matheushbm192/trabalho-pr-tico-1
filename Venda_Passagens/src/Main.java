@@ -6,7 +6,9 @@ public class Main {
     static LocalDate dataPartida = LocalDate.of(2024, 11, 1);
     static GerenciadorPartidas partida = new GerenciadorPartidas();
     static int countPartidas= 0;
+
     public static void menu(){
+        System.out.println("Dia atual: " + dataPartida);
         System.out.println("Bem vindo ao guichê. Informe qual ação deseja fazer:");
         System.out.println("1- Comprar passagem!");
         System.out.println("2- Realizar voo!");
@@ -34,7 +36,7 @@ public class Main {
 
     public static void passarDia() {
         Aviao aviao = partida.getAviao(dataPartida);
-
+        LocalDate dataLimite = LocalDate.of(2024,12,1);
         if (aviao.getTopoLista() != 0){
             aviao.atribuiPesosPassageiros(dataPartida);
             aviao.ordenaPassageiros();
@@ -45,8 +47,14 @@ public class Main {
         }
 
         countPartidas++;
-        dataPartida.plusDays(1);
 
+        dataPartida = dataPartida.plusDays(1);
+        if(dataPartida.isEqual(dataLimite)){
+            System.out.println("Todas as viagens do mês foram completadas");
+            System.exit(0);
+        }
+        System.out.println(dataPartida);
+        menu();
     }
 
     public static void cadastro() {
@@ -54,6 +62,8 @@ public class Main {
         System.out.println();
         System.out.println("Insira o seu nome:");
         String nome = entrada.nextLine();
+
+        entrada.nextLine();
         System.out.println("Insira o seu e-mail:");
         String email = entrada.nextLine();
         System.out.println("Insira o seu endereço:");
@@ -132,12 +142,14 @@ public class Main {
 
         System.out.println("Corredor: R$" + (550 - (550.00 * desconto)) );
     }
+
     public static void comprarPassagem(Passageiro passageiro) {
         LocalDate dataViagem;
         Aviao aviao;
         // todo criar funçao de validação do formato data
         while (true) {
             System.out.println("Deseja comprar passagem para qual dia ?(AAAA-MM-DD) ");
+
             String stringDataViagem = entrada.nextLine();
             dataViagem = LocalDate.parse(stringDataViagem);
 
@@ -207,6 +219,7 @@ public class Main {
         switch (escolha){
             case 1:
                 if(passageiro.limiteViagens()){
+                    entrada.nextLine();
                     comprarPassagem(passageiro);
                 }else{
                     System.out.println("O limite maximo de passagens foi atingido!");

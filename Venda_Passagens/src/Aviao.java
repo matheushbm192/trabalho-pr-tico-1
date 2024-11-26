@@ -47,8 +47,9 @@ public class Aviao {
            j = j + 1;
         }
         System.out.println("Fila de embarque/desembarque de passageiros: ");
+        System.out.println(lista[0].getNome());
         for (int k = 0; k < topoLista; k++) {
-            System.out.println(v[k].getNome());
+            System.out.println(lista[k].getNome());
         }
     }
 

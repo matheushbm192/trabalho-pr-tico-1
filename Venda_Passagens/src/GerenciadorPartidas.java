@@ -1,6 +1,4 @@
-
 import java.time.LocalDate;
-import java.util.Arrays;
 
 public class GerenciadorPartidas {
     Aviao listaAvioes[] = new Aviao[31];
@@ -8,13 +6,12 @@ public class GerenciadorPartidas {
 
     public void criarDiasVoos(LocalDate dataAtual){
 
-        System.out.println(dataAtual);
         int count = 1;
         for (int i = 0; i < dataAtual.lengthOfMonth(); i++) {
             diasVoos[i] = dataAtual.withDayOfMonth(count);
             count++;
         }
-        System.out.println(Arrays.toString(diasVoos));
+
     }
     
     // vai criar um aviao
@@ -26,7 +23,7 @@ public class GerenciadorPartidas {
                 listaAvioes[i] = novoAviao;
             }
         }
-        System.out.println(Arrays.toString(listaAvioes));
+
     }
     public Aviao getAviao(LocalDate data){
         int index = data.getDayOfMonth() - 1;
