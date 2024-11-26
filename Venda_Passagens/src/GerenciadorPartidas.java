@@ -1,4 +1,4 @@
-import java.lang.reflect.AccessFlag;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 
@@ -38,17 +38,7 @@ public class GerenciadorPartidas {
         return aviao.topoLista != 33;
     }
 
-    public void  adicionarPassagero(LocalDate data, int[][] poltrona, Passageiro passageiro){
-
-        Aviao aviao = getAviao(data);
-        aviao.addPassageiro(passageiro, poltrona);
-
-    }
-//    public void realizarPartida(){
-//        for (int i = 0; i < ; i++) {
 //
-//        }
-//    }
     //controlando qual dia
     //passageiro e utiliza a data que ele tem amazenada
     //verificar dia atual

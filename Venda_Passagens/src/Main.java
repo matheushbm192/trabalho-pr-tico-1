@@ -5,29 +5,51 @@ public class Main {
     static Scanner entrada = new Scanner(System.in);
     static LocalDate dataPartida = LocalDate.of(2024, 11, 1);
     static GerenciadorPartidas partida = new GerenciadorPartidas();
-
-    public static void gerenciadorPartida() {
-
-        partida.criarDiasVoos(dataPartida);
-        partida.criarAvioes();
-
-        for (int i = 0; i < dataPartida.lengthOfMonth(); i++) {
-            /*
-             * 
-             * //contabilizar cada voo
-             * loop de cadastro e compra:
-             * 
-             * //cadastra usuario
-             * //compra passagem obs.: em loop caso usuario queira mais de uma passagem
-             * //cadastrar outro usuario?
-             */
-
-            // realiza o voo
-            dataPartida.plusDays(1);
+    static int countPartidas= 0;
+    public static void menu(){
+        System.out.println("Bem vindo ao guichê. Informe qual ação deseja fazer:");
+        System.out.println("1- Comprar passagem!");
+        System.out.println("2- Realizar voo!");
+        System.out.println("3- Sair!");
+        int escolha = entrada.nextInt();
+        switch (escolha){
+            case 1:
+                cadastro();
+            break;
+            case 2:
+                passarDia();
+                break;
+            case 3:
+                sair();
+            break;
+            default:
+                System.out.println("Opção inválida. Tente novamente!");
+                menu();
         }
     }
 
-    public static Passageiro cadastro() {
+    public static void sair(){
+        System.exit(0);
+    }
+
+    public static void passarDia() {
+        Aviao aviao = partida.getAviao(dataPartida);
+
+        if (aviao.getTopoLista() != 0){
+            aviao.atribuiPesosPassageiros(dataPartida);
+            aviao.ordenaPassageiros();
+            System.out.println();
+            System.out.println("Viagem realizada com sucesso!!!");
+        }else{
+            System.out.println("Não háviam passageiros suficientes para a viagem ser realizada!");
+        }
+
+        countPartidas++;
+        dataPartida.plusDays(1);
+
+    }
+
+    public static void cadastro() {
         System.out.println("Vamos realizar o seu cadastro!");
         System.out.println();
         System.out.println("Insira o seu nome:");
@@ -48,6 +70,7 @@ public class Main {
         while (cont == 0) {
             System.out.println("Você possui alguma comorbidade?(Sim ou Não)");
             String stringComorbidade = entrada.nextLine();
+
             switch (stringComorbidade) {
                 case "Sim":
                     comorbidade = true;
@@ -61,32 +84,9 @@ public class Main {
                     System.out.println("A opção escolhida não é válida. Tente novamente.");
                     cont = 0;
             }
-
         }
-        return new Passageiro(nome, email, endereco, data, comorbidade);
-    }
-
-    public static void exibeAcentos(LocalDate data) {
-        Aviao aviao = new Aviao(data);
-        char[][] lugares = aviao.retornaAcentos();
-        // Mapeamento de acentos:
-        // 1 | A   C D
-        // 2 | A   C D 
-        int fileiras = 0;
-        for (int i = 0; i < lugares.length; i++) {
-            System.out.println(fileiras, " | ");
-            for (int j = 0; j < 3; j++) {
-                if (j == 1) {
-                    System.out.println(lugares[i][j], "   ");
-                } else {
-                    System.out.print(lugares[i][j], " ");
-                }
-
-            }
-            System.out.println(); // Quebra de linha por fila.
-            fileiras++;
-        }
-
+        Passageiro novoPassageiro = new Passageiro(nome, email, endereco, data, comorbidade);
+        comprarPassagem(novoPassageiro);
     }
 
     public static boolean dataViagemValida(LocalDate data) {
@@ -97,47 +97,131 @@ public class Main {
         return true;
     }
 
-    public static void comprarPassagem(Passageiro passageiro) {
+    public static void valores(Passageiro passagero){
+        double desconto = 0;
+        if(passagero.getQuantidadeViagensFeitas() <= 10){
+            desconto += passagero.getQuantidadeViagensFeitas() * 0.05;
+        }else if(passagero.getQuantidadeViagensFeitas() > 10){
+            desconto += 0.5;
+        }
+        if(passagero.isComorbidade()){
+            desconto += 0.15;
+        }
+        if(passagero.idoso(dataPartida)){
+            desconto += 0.05;
+        }
+        if(passagero.aniversariante(dataPartida)){
+            desconto += 0.05;
+        }
 
+        System.out.println("Valores das poltronas sem desconto:");
+
+        System.out.println("Janlea lado direirto: R$720.00");
+
+        System.out.println("Janlea lado esquerdo: R$850.00");
+
+        System.out.println("Corredor: R$550.00");
+
+        System.out.println("----------------------------------");
+
+        System.out.println("Valores das poltronas com desconto:");
+
+        System.out.println("Janlea lado direito: R$" + (720.00-(720.00 * desconto )) );
+
+        System.out.println("Janlea lado esquerdo: R$" + (850.00-(850.00 * desconto)) );
+
+        System.out.println("Corredor: R$" + (550 - (550.00 * desconto)) );
+    }
+    public static void comprarPassagem(Passageiro passageiro) {
+        LocalDate dataViagem;
+        Aviao aviao;
         // todo criar funçao de validação do formato data
         while (true) {
             System.out.println("Deseja comprar passagem para qual dia ?(AAAA-MM-DD) ");
             String stringDataViagem = entrada.nextLine();
-            LocalDate dataViagem = LocalDate.parse(stringDataViagem);
+            dataViagem = LocalDate.parse(stringDataViagem);
+
             if (!partida.vagasAviao(dataViagem)) {
                 System.out.println("O avião atingiu sua capacidade máxima. Escolha outra data.");
-            } else if (dataViagemValida(dataViagem)) {
-                break;
-            } else {
-                System.out.println("Data inválida! A data deve ser maior que a atual.");
+            }else if(!passageiro.dataLivre(dataViagem)){
+
+                if (dataViagemValida(dataViagem)) {
+                    aviao = partida.getAviao(dataViagem);
+                    break;
+                } else {
+                    System.out.println("Data inválida! A data deve ser maior que a atual.");
+                }
+            } else{
+                System.out.println("O passageiro ja possui uma viagem agendada para esse dia, escolha outro!");
             }
         }
+
         System.out.println("Informe o acento que você deseja (Os acentos númerados como 0 já estão ocupados!):");
-        exibeAcentos(dataViagem);
-        // escolher lugar
+        aviao.exibeAcentos();
+        valores(passageiro);
+        int fileira;
+        int coluna = 3;
+        String poltrona;
+        while(true){
+            // escolher lugar
+            System.out.println("Informe o número da fila que deseja!");
+            fileira = entrada.nextInt();
+            entrada.nextLine();
+            System.out.println("Insira a letra da poltrona que deseja!");
+            poltrona = entrada.nextLine();
 
+            switch (poltrona){
+                case "A":
+                    coluna = 0;
+                    break;
+                case "C":
+                    coluna = 1;
+                    break;
+                case "D":
+                    coluna = 2;
+                    break;
+                default:
+                    System.out.println("A poltrona esolhida deve ser a A, C ou D!");
+            }
+
+            if(fileira > 0 && fileira < 12 && coluna < 3 && coluna > -1){
+                if (aviao.lugarVago(fileira,coluna)){
+                    break;
+                }else{
+                    System.out.println("O lugar escolhida já está ocupado.");
+                }
+
+            }
+        }
+        //atribuie o passageiro ao aviao
+        aviao.addPassageiro(passageiro);
+        //ocupar o lugar
+        aviao.ocuparLugar(fileira, coluna);
+
+        aviao.exibeAcentos();
         // acrescentar lista de viagem pendentes
+        passageiro.comprarViagem(dataViagem);
 
-        System.out.println("Qual");
-        // passar lista de acentos disponiveis para o usuario de acordo com o dia
-        // especifico
-
-        // adicionar passagem ao usuario
-
-        // se ele ja possui passagem nessa data, se data é maior que atual, se a data
-        // esta nesse mes, se tem espaço no voo para esse dia
-
+        System.out.println("Deseja comprar mais passagens: 1- Sim, 2- Não");
+        int escolha = entrada.nextInt();
+        switch (escolha){
+            case 1:
+                if(passageiro.limiteViagens()){
+                    comprarPassagem(passageiro);
+                }else{
+                    System.out.println("O limite maximo de passagens foi atingido!");
+                    menu();
+                }
+            break;
+            case 2:
+                menu();
+            break;
+        }
     }
 
     public static void main(String[] args) {
-        Passageiro passageiro = cadastro();
-        comprarPassagem(passageiro);
-        // LocalDate data = LocalDate.of(1950,11,18);
-        // Passageiro leandro = new Passageiro("leo","ksnaksdn","sad",data,false);
-        // boolean bool = leandro.idoso();
-        // System.out.println(bool);
-        // bool = leandro.aniversariante();
-        // System.out.println(bool);
-
+        partida.criarDiasVoos(dataPartida);
+        partida.criarAvioes();
+        menu();
     }
 }
